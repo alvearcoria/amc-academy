@@ -8,9 +8,11 @@ import {
   NB_AUTH_OPTIONS,
   NbAuthResult,
 } from '@nebular/auth';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import * as fromI18n from '../../@i18n/reducers';
 import { Language } from '../../@i18n/models/language.model';
+import { AuthService } from '../../@core/utils.ts/auth.service';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Component({
   selector: 'ngx-login',
@@ -18,6 +20,7 @@ import { Language } from '../../@i18n/models/language.model';
 })
 export class NgxLoginComponent extends NbLoginComponent {
   currentLanguage$: Observable<Language>;
+  isLoggedIn: boolean = false;
 
   constructor(
     protected service: NbAuthService,
@@ -25,7 +28,9 @@ export class NgxLoginComponent extends NbLoginComponent {
     protected cd: ChangeDetectorRef,
     protected router: Router,
     readonly store: Store<fromI18n.State>,
-    readonly translate: TranslateService
+    readonly translate: TranslateService,
+    private authService: AuthService,
+    private afAuth: AngularFireAuth,
   ) {
     super(service, options, cd, router);
   }
@@ -35,25 +40,31 @@ export class NgxLoginComponent extends NbLoginComponent {
     this.messages = [];
     this.submitted = true;
 
-    this.service
-      .authenticate(this.strategy, this.user)
-      .subscribe((result: NbAuthResult) => {
+    this.authService.login(this.user.email, this.user.password)
+      .then(result => {
         this.submitted = false;
+        this.messages = ['Login successful'];
 
-        if (result.isSuccess()) {
-          this.messages = result.getMessages();
-        } else {
-          this.errors = result.getErrors();
-        }
-        let redirect =
-          result.getResponse().body.data.redirect || result.getRedirect();
+        // Aquí especificamos la ruta de redirección después del login exitoso
+        const redirect = 'pages/home'; // Cambia esto según tu ruta principal
 
         if (redirect) {
-          setTimeout(() => {
-            return this.router.navigateByUrl(redirect);
-          }, this.redirectDelay);
+          //console.log('Redireccionando a:', redirect); // Verificar que la redirección se está intentando
+          this.router.navigateByUrl(redirect)
+            .then(nav => {
+              //console.log('Navegación exitosa:', nav);
+            })
+            .catch(err => {
+              console.error('Error de navegación:', err);
+            });
         }
+        this.cd.detectChanges();
+      })
+      .catch(error => {
+        this.submitted = false;
+        this.errors = [error.message];
         this.cd.detectChanges();
       });
   }
+
 }

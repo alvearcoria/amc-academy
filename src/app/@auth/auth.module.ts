@@ -18,6 +18,7 @@ import {
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxResetPasswordComponent } from './reset-password/reset-password.component';
 import { NgxAuthComponent } from './ngx-auth/ngx-auth.component';
+import { LogoutComponent } from './logout/logout.component';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { NgxAuthComponent } from './ngx-auth/ngx-auth.component';
   declarations: [
     NgxAuthComponent,
     NgxLoginComponent,
-    NgxResetPasswordComponent
+    NgxResetPasswordComponent,
+    LogoutComponent
   ],
 })
 export class NgxAuthModule {

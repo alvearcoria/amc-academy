@@ -1,21 +1,23 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './app-auth-guard.service';
+import { AuthGuard } from './@core/utils.ts/auth.guard';
+import { AuthRedirectGuard } from './@core/utils.ts/auth-redirect.guard';
 
 const routes: Routes = [
   {
     path: 'pages',
-    //canActivate: [AuthGuard], <-- Remove comment to enable auth guard. Remeber to setup NbAuthServiceModule in @core accordingly with yuor backend
+    canActivate: [AuthGuard],
     loadChildren: () => import('./pages/pages.module')
       .then(m => m.PagesModule),
   },
   {
     path: 'auth',
+    canActivate: [AuthRedirectGuard],
     loadChildren: () => import('./@auth/auth.module')
     .then(m => m.NgxAuthModule),
   },
-  { path: '', redirectTo: 'auth', pathMatch: 'prefix'},
-  { path: '**', redirectTo: 'auth' },
+  { path: '', redirectTo: 'auth/login', pathMatch: 'prefix'},
+  { path: '**', redirectTo: 'auth/login' },
 ];
 
 @NgModule({

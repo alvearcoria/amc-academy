@@ -11,16 +11,16 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'Prueba',
     icon: 'home-outline',
     link: '/pages/prueba',
-    home: true,
   },
-  {
-    title: 'Auth',
-    icon: 'lock-outline',
-    link: '/auth',
-  },
+
   {
     title: 'Not found',
     icon: 'close-circle-outline',
     link: '/pages/whatever',
+  },
+  {
+    title: 'Salir',
+    icon: 'lock-outline',
+    link: '/pages/salir',
   }
 ];

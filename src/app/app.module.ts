@@ -20,6 +20,15 @@ import { ResponseInterceptor } from './@interceptors/response.interceptor';
 import { NbCustomTokenStorage } from './@core/utils.ts/customtokenstorage';
 import { CoreModule } from './@core/core.module';
 import { I18nModule } from './@i18n/i18n.module';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getAuth, provideAuth } from '@angular/fire/auth';
+import { getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
+import { initializeAppCheck, ReCaptchaEnterpriseProvider, provideAppCheck } from '@angular/fire/app-check';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { AngularFireModule } from "@angular/fire/compat";
+import { AngularFireAuthModule } from "@angular/fire/compat/auth";
+import { environment } from "../environments/environment";
+import { NgxAuthModule } from './@auth/auth.module';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -35,6 +44,8 @@ function filterInterceptorRequest(req: HttpRequest<any>): boolean {
     AppComponent
   ],
   imports: [
+    AngularFireAuthModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
     I18nModule,
     BrowserModule,
     AppRoutingModule,
@@ -72,8 +83,9 @@ function filterInterceptorRequest(req: HttpRequest<any>): boolean {
     }),
     StoreRouterConnectingModule.forRoot(),
     NgbModule,
+    NgxAuthModule,
   ],
-  providers: [ 
+  providers: [
     {provide: LocationStrategy, useClass: HashLocationStrategy},
     { provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},
     { provide: HTTP_INTERCEPTORS, useClass: ResponseInterceptor, multi: true},
@@ -81,6 +93,17 @@ function filterInterceptorRequest(req: HttpRequest<any>): boolean {
     {provide: APP_BASE_HREF, useValue: "/" },
     { provide: NbTokenStorage, useClass: NbCustomTokenStorage },
     { provide: LOCALE_ID, useValue: 'it-IT'},
+    provideFirebaseApp(() => initializeApp({"projectId":"amc-academy-7dd40","appId":"1:982667293587:web:ca9a6b989acad4d64dee66","storageBucket":"amc-academy-7dd40.appspot.com","apiKey":"AIzaSyCNiBGxFMjpJperBt5d27q861LRe04aSrI","authDomain":"amc-academy-7dd40.firebaseapp.com","messagingSenderId":"982667293587","measurementId":"G-LLS6Z6PL89"})),
+    provideAuth(() => getAuth()),
+    provideAnalytics(() => getAnalytics()),
+    ScreenTrackingService,
+    UserTrackingService,
+/*     provideAppCheck(() => {
+      // TODO get a reCAPTCHA Enterprise here https://console.cloud.google.com/security/recaptcha?project=_
+      const provider = new ReCaptchaEnterpriseProvider(/* reCAPTCHA Enterprise site key * /);
+      return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
+    }), */
+    provideFirestore(() => getFirestore()),
 
   ],
   bootstrap: [AppComponent]
