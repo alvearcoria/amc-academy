@@ -1,1 +1,10 @@
-<p>prueba works!</p>
+<div class="background">
+  <div class="clock-container">
+    <div class="date">{{ currentDate | date: 'fullDate' }}</div>
+    <div class="time">
+      <span>{{ currentDate | date: 'HH' }}</span>:<span>{{ currentDate | date: 'mm' }}</span>:<span>{{ currentDate |
+        date: 'ss' }}</span>
+      <span>{{ currentDate | date: 'a' }}</span>
+    </div>
+  </div>
+</div>

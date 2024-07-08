@@ -1,4 +1,4 @@
-<p class="sub-title">{{ '@auth.login' | translate}}</p>
+<p class="sub-title">Log in to use the dashboard!</p>
 
 <nb-alert *ngIf="showMessages.error && errors?.length && !submitted" outline="danger" role="alert">
   <p class="alert-title"><b>Oh snap!</b></p>
@@ -14,10 +14,9 @@
   </ul>
 </nb-alert>
 
-<form (ngSubmit)="login()" #form="ngForm" aria-labelledby="title">
-
+<form (ngSubmit)="login()" #form="ngForm" aria-labelledby="title" autocomplete="off">
   <div class="form-control-group">
-    <label class="label" for="input-username">{{'@auth.username' | translate}}:</label>
+    <label class="label" for="input-username">Insert your email:</label>
     <input nbInput fullWidth [(ngModel)]="user.email" #username="ngModel" name="username" id="input-username"
       placeholder="User" autofocus [status]="username.dirty ? (username.invalid  ? 'danger' : 'success') : ''" required
       [minlength]="getConfigValue('forms.validation.username.minLength')"
@@ -25,7 +24,7 @@
       [attr.aria-invalid]="username.invalid && username.touched ? true : null">
     <ng-container *ngIf="username.invalid && username.touched">
       <p class="error-message" *ngIf="username.errors?.['required']">
-        {{'@auth.required_username' | translate}}
+        Email is required
       </p>
       <p class="error-message" *ngIf="username.errors?.['pattern']">
         Username should be the real one!
@@ -34,7 +33,7 @@
   </div>
 
   <div class="form-control-group">
-    <label class="label" for="input-password">{{'@auth.password' | translate}}:</label>
+    <label class="label" for="input-password">Enter your password:</label>
     <input nbInput fullWidth [(ngModel)]="user.password" #password="ngModel" name="password" type="password"
       id="input-password" placeholder="Password"
       [status]="password.dirty ? (password.invalid  ? 'danger' : 'success') : ''"
@@ -44,8 +43,7 @@
       [attr.aria-invalid]="password.invalid && password.touched ? true : null">
     <ng-container *ngIf="password.invalid && password.touched ">
       <p class="error-message" *ngIf="password.errors?.['required']">
-        {{'@auth.required_password' | translate}}
-
+        The password is mandatory
       </p>
       <p class="error-message" *ngIf="password.errors?.['minlength'] || password.errors?.['maxLength']">
         Password should contains
@@ -56,13 +54,23 @@
     </ng-container>
   </div>
 
-  <div class="form-control-group accept-group">
-    <nb-checkbox name="rememberMe" [(ngModel)]="user.rememberMe" *ngIf="rememberMe"> {{'@auth.remember' |
-      translate}}</nb-checkbox>
-    <a class="forgot-password" routerLink="../request-password" hidden>Forgot Password?</a>
-  </div>
-
   <button nbButton fullWidth status="success" [disabled]="submitted || !form.valid" [class.btn-pulse]="submitted">
     Log In
   </button>
 </form>
+
+<section class="links" aria-label="Social sign in">
+  o ingresa con:
+  <div class="socials">
+    <ng-container>
+      <nb-icon icon="google-outline" pack="eva" size="giant" style="font-size: 48px;"
+        [options]="{ animation: { type: 'zoom', } }" (click)="loginWithGoogle()"></nb-icon>
+      <nb-icon icon="facebook-outline" pack="eva" size="giant" style="font-size: 48px;"
+        [options]="{ animation: { type: 'zoom', } }" (click)="loginWithFacebook()"></nb-icon>
+    </ng-container>
+  </div>
+</section>
+
+<section class="another-action" aria-label="Register">
+  ¿No tienes cuenta? <a class="text-link" routerLink="../register">Registrate aqui</a>
+</section>

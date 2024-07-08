@@ -1,0 +1,33 @@
+.background {
+  //background-image: url('/assets/tu-imagen-de-fondo.jpg'); // Cambia esto por la ruta de tu imagen de fondo
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.clock-container {
+  text-align: center;
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.date {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.time {
+  font-size: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.time span {
+  margin: 0 5px;
+}

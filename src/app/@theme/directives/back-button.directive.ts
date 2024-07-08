@@ -1,5 +1,5 @@
 import { Directive, HostListener, Input } from "@angular/core";
-import { NavigationService } from '../../@core/utils.ts/navigation.service';
+import { NavigationService } from '../../@core/utils/navigation.service';
 
 @Directive({
   selector: "[backButton]",

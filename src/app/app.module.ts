@@ -4,10 +4,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ThemeModule } from './@theme/theme.module';
-import { NbDialogModule, NbMenuModule, NbSidebarModule, NbToastrModule, NbWindowModule } from '@nebular/theme';
+import { NbDialogModule, NbIconLibraries, NbMenuModule, NbSidebarModule, NbToastrModule, NbWindowModule } from '@nebular/theme';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule, HttpRequest } from '@angular/common/http';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+//import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+//import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { StoreModule } from '@ngrx/store';
 import { ROOT_REDUCERS, metaReducers } from './@reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -17,25 +17,34 @@ import { APP_BASE_HREF, HashLocationStrategy, LocationStrategy } from '@angular/
 import { NB_AUTH_TOKEN_INTERCEPTOR_FILTER, NbTokenStorage } from '@nebular/auth';
 import { JWTInterceptor } from './@interceptors/jwt.interceptor';
 import { ResponseInterceptor } from './@interceptors/response.interceptor';
-import { NbCustomTokenStorage } from './@core/utils.ts/customtokenstorage';
+import { NbCustomTokenStorage } from './@core/utils/customtokenstorage';
 import { CoreModule } from './@core/core.module';
 import { I18nModule } from './@i18n/i18n.module';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
-import { initializeAppCheck, ReCaptchaEnterpriseProvider, provideAppCheck } from '@angular/fire/app-check';
+//import { initializeAppCheck, ReCaptchaEnterpriseProvider, provideAppCheck } from '@angular/fire/app-check';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFireAuthModule } from "@angular/fire/compat/auth";
 import { environment } from "../environments/environment";
 import { NgxAuthModule } from './@auth/auth.module';
 
-export function createTranslateLoader(http: HttpClient) {
+// Importar las configuraciones de localización
+import { registerLocaleData } from '@angular/common';
+import localeEsMX from '@angular/common/locales/es-MX';
+
+// Registrar la localización
+registerLocaleData(localeEsMX, 'es-MX');
+
+//import { FontAwesomeModule } from '@fortawesome/fontawesome-free';
+
+/* export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
-}
+} */
 
 function filterInterceptorRequest(req: HttpRequest<any>): boolean {
-  return ['/api/v1/auth/login','/api/v1/auth/refresh-token']
+  return ['/api/v1/auth/login', '/api/v1/auth/refresh-token']
     .some(url => req.url.includes(url));
 }
 
@@ -58,17 +67,17 @@ function filterInterceptorRequest(req: HttpRequest<any>): boolean {
     NbDialogModule.forRoot(),
     NbWindowModule.forRoot(),
     NbToastrModule.forRoot(),
-    TranslateModule.forRoot(
-      {
-        defaultLanguage: 'en-US',
-        isolate: false,
-        loader: {
-          provide: TranslateLoader,
-          useFactory: (createTranslateLoader),
-          deps: [HttpClient]
-        }
-      }
-    ),
+    /*     TranslateModule.forRoot(
+          {
+            defaultLanguage: 'en-US',
+            isolate: false,
+            loader: {
+              provide: TranslateLoader,
+              useFactory: (createTranslateLoader),
+              deps: [HttpClient]
+            }
+          }
+        ), */
     StoreModule.forRoot(ROOT_REDUCERS, {
       metaReducers,
       runtimeChecks: {
@@ -86,26 +95,37 @@ function filterInterceptorRequest(req: HttpRequest<any>): boolean {
     NgxAuthModule,
   ],
   providers: [
-    {provide: LocationStrategy, useClass: HashLocationStrategy},
-    { provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true},
-    { provide: HTTP_INTERCEPTORS, useClass: ResponseInterceptor, multi: true},
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
+    { provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ResponseInterceptor, multi: true },
     { provide: NB_AUTH_TOKEN_INTERCEPTOR_FILTER, useValue: filterInterceptorRequest },
-    {provide: APP_BASE_HREF, useValue: "/" },
+    { provide: APP_BASE_HREF, useValue: "/" },
     { provide: NbTokenStorage, useClass: NbCustomTokenStorage },
-    { provide: LOCALE_ID, useValue: 'it-IT'},
-    provideFirebaseApp(() => initializeApp({"projectId":"amc-academy-7dd40","appId":"1:982667293587:web:ca9a6b989acad4d64dee66","storageBucket":"amc-academy-7dd40.appspot.com","apiKey":"AIzaSyCNiBGxFMjpJperBt5d27q861LRe04aSrI","authDomain":"amc-academy-7dd40.firebaseapp.com","messagingSenderId":"982667293587","measurementId":"G-LLS6Z6PL89"})),
+    //{ provide: LOCALE_ID, useValue: 'it-IT'},
+    { provide: LOCALE_ID, useValue: 'es-MX' }, // Establecer la localización predeterminada a español de México,
+    provideFirebaseApp(() => initializeApp({ "projectId": "amc-academy-7dd40", "appId": "1:982667293587:web:ca9a6b989acad4d64dee66", "storageBucket": "amc-academy-7dd40.appspot.com", "apiKey": "AIzaSyCNiBGxFMjpJperBt5d27q861LRe04aSrI", "authDomain": "amc-academy-7dd40.firebaseapp.com", "messagingSenderId": "982667293587", "measurementId": "G-LLS6Z6PL89" })),
     provideAuth(() => getAuth()),
     provideAnalytics(() => getAnalytics()),
     ScreenTrackingService,
     UserTrackingService,
-/*     provideAppCheck(() => {
-      // TODO get a reCAPTCHA Enterprise here https://console.cloud.google.com/security/recaptcha?project=_
-      const provider = new ReCaptchaEnterpriseProvider(/* reCAPTCHA Enterprise site key * /);
-      return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
-    }), */
+    /*     provideAppCheck(() => {
+          // TODO get a reCAPTCHA Enterprise here https://console.cloud.google.com/security/recaptcha?project=_
+          const provider = new ReCaptchaEnterpriseProvider(/* reCAPTCHA Enterprise site key * /);
+          return initializeAppCheck(undefined, { provider, isTokenAutoRefreshEnabled: true });
+        }), */
     provideFirestore(() => getFirestore()),
 
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private iconLibraries: NbIconLibraries) {
+    // Registra FontAwesome como un pack de íconos
+    this.iconLibraries.registerFontPack('fas', { packClass: 'fas', iconClassPrefix: 'fa' });
+    this.iconLibraries.registerFontPack('fa', { packClass: 'fa', iconClassPrefix: 'fa' });
+    this.iconLibraries.registerFontPack('fab', { packClass: 'fab', iconClassPrefix: 'fa' });
+    // Establece 'fas' como el paquete predeterminado
+    this.iconLibraries.setDefaultPack('fas');
+
+  }
+}

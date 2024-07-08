@@ -6,7 +6,6 @@ import { NbAuthComponent } from '@nebular/auth';
  */
 import { Component, } from '@angular/core';
 
-
 @Component({
   selector: 'ngx-auth',
   styleUrls: ['./ngx-auth.component.scss'],

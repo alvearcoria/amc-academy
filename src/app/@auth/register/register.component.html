@@ -1,0 +1,106 @@
+<!-- <div class="register-container">
+  <form (ngSubmit)="register()" #form="ngForm" aria-labelledby="title">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input nbInput fullWidth [(ngModel)]="user.name" #name="ngModel" name="name" id="name" placeholder="Name"
+        required>
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input nbInput fullWidth [(ngModel)]="user.email" #email="ngModel" name="email" id="email" placeholder="Email"
+        required>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input nbInput fullWidth [(ngModel)]="user.password" #password="ngModel" name="password" type="password"
+        id="password" placeholder="Password" required>
+    </div>
+    <div class="form-group">
+      <label for="photoURL">Profile Picture URL</label>
+      <input nbInput fullWidth [(ngModel)]="user.photoURL" #photoURL="ngModel" name="photoURL" id="photoURL"
+        placeholder="Profile Picture URL">
+    </div>
+    <button nbButton fullWidth status="success" [disabled]="submitted || !form.valid" [class.btn-pulse]="submitted">
+      Register
+    </button>
+  </form>
+</div> -->
+
+<nb-card>
+  <nb-card-header>Register</nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="registerForm" (ngSubmit)="register()">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input nbInput fullWidth id="name" formControlName="name" placeholder="Full Name">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input nbInput fullWidth id="email" formControlName="email" placeholder="Email Address">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input nbInput fullWidth id="password" formControlName="password" type="password" placeholder="Password">
+      </div>
+
+      <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <input nbInput fullWidth id="phoneNumber" formControlName="phoneNumber" placeholder="Phone Number">
+      </div>
+
+      <div class="form-group">
+        <label for="dateOfBirth">Date of Birth</label>
+        <input nbInput fullWidth [nbDatepicker]="datepicker" id="dateOfBirth" formControlName="dateOfBirth"
+          placeholder="Date of Birth">
+        <nb-datepicker #datepicker></nb-datepicker>
+      </div>
+
+      <div formGroupName="address">
+        <label for="street">Street</label>
+        <input nbInput fullWidth id="street" formControlName="street" placeholder="Street Address">
+
+        <label for="city">City</label>
+        <input nbInput fullWidth id="city" formControlName="city" placeholder="City">
+
+        <label for="state">State</label>
+        <input nbInput fullWidth id="state" formControlName="state" placeholder="State">
+
+        <label for="zipCode">Zip Code</label>
+        <input nbInput fullWidth id="zipCode" formControlName="zipCode" placeholder="Zip Code">
+
+        <label for="country">Country</label>
+        <input nbInput fullWidth id="country" formControlName="country" placeholder="Country">
+      </div>
+
+      <div class="form-group">
+        <label for="gender">Gender</label>
+        <nb-select fullWidth id="gender" formControlName="gender">
+          <nb-option *ngFor="let gender of genders" [value]="gender">{{ gender }}</nb-option>
+        </nb-select>
+      </div>
+
+      <div class="form-group">
+        <label for="role">Role</label>
+        <nb-select fullWidth id="role" formControlName="role">
+          <nb-option *ngFor="let role of roles" [value]="role">{{ role }}</nb-option>
+        </nb-select>
+      </div>
+
+      <div class="form-group">
+        <label for="profilePicture">Profile Picture URL</label>
+        <input nbInput fullWidth id="profilePicture" formControlName="profilePicture"
+          placeholder="URL to Profile Picture">
+      </div>
+
+      <div formGroupName="preferences">
+        <label for="notifications">Notifications</label>
+        <nb-checkbox id="notifications" formControlName="notifications">Enable Notifications</nb-checkbox>
+      </div>
+
+      <button nbButton status="success" type="submit" [disabled]="registerForm.invalid">Register</button>
+    </form>
+  </nb-card-body>
+</nb-card>
+

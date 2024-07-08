@@ -19,7 +19,7 @@ import {
   StateService,
   RoleProvider,
   StorageService,
-} from './utils.ts';
+} from './utils';
 
 export const NB_CORE_PROVIDERS = [
   { provide: NbRoleProvider, useClass: RoleProvider }, // provide the class
